@@ -7,4 +7,5 @@ public class Utils {
         }
         return query.replaceAll("\\s+", "");
     }
+
 }

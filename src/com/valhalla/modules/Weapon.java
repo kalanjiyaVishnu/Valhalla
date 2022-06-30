@@ -9,15 +9,15 @@ public class Weapon {
         attackImpact = impact;
     }
 
-    public void upgrage(int xp){
+    public void weaponUpgrage(int xp) {
         this.attackImpact += xp;
     }
 
     @Override
     public String toString() {
-        return "Weapon{" +
-                "name='" + name + '\'' +
+        return "{ " + name + '\'' +
                 ", attackImpact=" + attackImpact +
                 '}';
     }
+
 }

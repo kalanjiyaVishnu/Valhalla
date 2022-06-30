@@ -1,8 +1,4 @@
 package com.valhalla.modules;
-
-import java.util.HashMap;
-import java.util.Map;
-
 public class Tribe {
     String name;
     //    Map<String, Weapon> weaponMap = new HashMap<>();
@@ -18,9 +14,7 @@ public class Tribe {
 
     @Override
     public String toString() {
-        return "Tribe{" +
-                "name='" + name + '\'' +
-                ", attackingWeapon=" + attackingWeapon +
-                '}';
+        return "Tribe - " + name + '\'' +
+                ", attackingWeapon=" + attackingWeapon;
     }
 }

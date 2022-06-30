@@ -1,13 +1,18 @@
 package com.valhalla.modules;
 
+import com.valhalla.modules.ExcepTions.NoWallAttack;
+import com.valhalla.utils.Direction;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class Clan {
     Tribe tribe;
     Map<Character, Wall> walls = new HashMap<>();
-    public int BATTLE_WON;
-    public int BATTLE_LOST;
+    int BATTLE_WON;
+
+    int BATTLE_LOST;
 
     public Clan(Tribe tribe) {
         this.tribe = tribe;
@@ -16,75 +21,44 @@ public class Clan {
 
     private void buildWalls() {
 //        totalWAll: int to generate n number of walls rather than four -> list<Direction> -> map and gen walls
+        /*
+
+        for (var dir :
+                Direction.values()) {
+            walls.put(dir.toString().charAt(0), new Wall(0, 'N'));
+        }
+        */
 //       but for now hard coding
-        walls.put('N', new Wall(0, 'N'));
-        walls.put('S', new Wall(0, 'S'));
-        walls.put('W', new Wall(0, 'W'));
-        walls.put('E', new Wall(0, 'E'));
+        Stream.of('N', 'S', 'W', 'E').forEach(d -> walls.put(d, new Wall(0, d)));
     }
-
-    @Override
-    public String toString() {
-        return "Clan{" +
-                "clanName='" + tribe.name + '\'' +
-                ", walls status ='" + walls +
-                '}';
-    }
-
-//    public boolean attack(Clan clan,Weapon weapon) {
-//        clan.battle(
-//    }
-
 
     public boolean defend(Tribe attackingTribe, char directionOfAttack) {
-        System.out.println(attackingTribe + " attacking in " + directionOfAttack);
-//        classic State pattern
-        if (!walls.get(directionOfAttack).canWithStand(attackingTribe.attackingWeapon.attackImpact)) {
+        try {
+            if (!walls.containsKey(directionOfAttack)) {
+                throw new NoWallAttack();
+//            throw new IllegalStateException("CLAN HAS NO WALL ON THIS DIRECTION!! :) EASY WIN");
+            }
+        } catch (NoWallAttack e) {
+            throw new RuntimeException(e);
+        }
 
+        System.out.println(attackingTribe + " attacking in " + directionOfAttack);
+
+//        classic State pattern
+        if (!isWallCanWithstandInDirection(directionOfAttack, attackingTribe.attackingWeapon.attackImpact)) {
             walls.get(directionOfAttack).rebuildStrong();
             currBattleStatus(false);
             return false;
-        } else {
-            System.out.println(this.tribe.name + " WON against " + attackingTribe.name);
-            currBattleStatus(true);
-            return true;
         }
 
-       /*
-        switch (directionOfAttack) {
+        System.out.println(this.tribe.name + " WON against " + attackingTribe.name);
+        currBattleStatus(true);
+        return true;
 
-            case "N":
-//                System.out.println(attackingTribe);
-                if (!walls.get(directionOfAttack).canWithStand(attackingTribe.attackingWeapon.attackImpact)) {
-                    walls.get(directionOfAttack).rebuildStrong();
-                } else {
-                    System.out.println(this.tribe.name + " WON against " + attackingTribe.name);
-                }
-                break;
-            case "S":
-                if (!walls.get(directionOfAttack).canWithStand(attackingTribe.weaponMap.get("X").attackImpact)) {
-                    walls.get(directionOfAttack).rebuildStrong();
-                } else {
-                    System.out.println(this.tribe.name + " WON against " + attackingTribe.name);
-                }
-                break;
-            case "W":
-//                if (!walls.get(directionOfAttack).canWithStand(attackingTribe.weaponMap.get("X").attackImpact)) {
-//                    walls.get(directionOfAttack).rebuildStrong();
-//                } else {
-//                    System.out.println(this.tribe.name + " WON against " + attackingTribe.name);
-//                }
-                break;
-            case "E":
-//                if (!walls.get(directionOfAttack).canWithStand(attackingTribe.weaponMap.get("X").attackImpact)) {
-//                    walls.get(directionOfAttack).rebuildStrong();
-//                } else {
-//                    System.out.println(this.tribe.name + " WON against " + attackingTribe.name);
-//                }
-                break;
+    }
 
-        }
-        */
+    boolean isWallCanWithstandInDirection(char dir, int attackImpact) {
+        return walls.get(dir).canWithStand(attackImpact);
     }
 
     public void clanStatus() {
@@ -92,7 +66,8 @@ public class Clan {
         System.out.println(this.clanName() + " has Lost to " + this.BATTLE_LOST + " tribes");
         System.out.println("-----------");
     }
-    void currBattleStatus(boolean isWon){
+
+    private void currBattleStatus(boolean isWon){
         if (isWon) {
             BATTLE_WON++;
         }
@@ -101,5 +76,16 @@ public class Clan {
 
     public String clanName() {
         return tribe.name;
+    }
+    public int battlesLost() {
+        return BATTLE_LOST;
+    }
+
+    @Override
+    public String toString() {
+        return "Clan{" +
+                "clanName='" + tribe.name + '\'' +
+                ", walls status ='" + walls +
+                '}';
     }
 }

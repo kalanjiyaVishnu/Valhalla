@@ -14,8 +14,10 @@ public class BattleField {
 
     public static void main(String[] args) {
         var bersekers = new Clan(new Tribe("Bersekers"));
-        String query = "Day 1$ T1 - S - X - 4: T1 - N - X - 2: T3 - W - X - 3; Day 2$ T2 - S - X - 5: T2- N - X - 1: T3 - N - X - 3; Day 3$ T1 - W - X - 2: T1 - W - X - 4: T2 - N - X - 3: T2- S - X - 4";
-        new BattleField(bersekers).startWar(query);
+        Scanner sc = new Scanner(System.in);
+//        String query = "Day 1$ T1 - S - X - 4: T1 - N - X - 2: T3 - W - X - 3; Day 2$ T2 - S - X - 5: T2- N - X - 1: T3 - N - X - 3; Day 3$ T1 - W - X - 2: T1 - W - X - 4: T2 - N - X - 3: T2- S - X - 4";
+        String q = sc.nextLine();
+        new BattleField(bersekers).startWar(q);
     }
 
     public void startWar(String query) {
@@ -32,7 +34,7 @@ public class BattleField {
                 System.out.println(day + " Attacks");
 
                 String[] attackingForcesOnThisDay = q[1].split(":");
-                currIncomminTribes(attackingForcesOnThisDay);
+                incomminTribes(attackingForcesOnThisDay);
 
             }
 //            Battle status
@@ -44,12 +46,12 @@ public class BattleField {
     }
 
     //    total tribe attacks in a day
-    public void currIncomminTribes(String[] tribes) {
+    public void incomminTribes(String[] tribes) {
         for (String force :
                 tribes) {
             String[] tribeDetails = force.split("-");
             String tribeName = tribeDetails[0];
-            char dirOfAttack = tribeDetails[1].toCharArray()[0];
+            char dirOfAttack = tribeDetails[1].charAt(0);
             var tribe = new Tribe(tribeName);
             tribe.addWeapon(tribeDetails[2], Integer.parseInt(tribeDetails[3]));
             defendingClan.defend(tribe, dirOfAttack);

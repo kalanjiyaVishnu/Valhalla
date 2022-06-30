@@ -15,7 +15,7 @@ class BattleFieldTest {
         var bersekers = new Clan(new Tribe("Bersekers"));
 //        start the war
         new BattleField(bersekers).startWar(query.replaceAll("\\s+", ""));
-        assertEquals(2, bersekers.BATTLE_LOST);
+        assertEquals(2, bersekers.battlesLost());
     }
 
     @org.junit.jupiter.api.Test
@@ -25,6 +25,6 @@ class BattleFieldTest {
         var bersekers = new Clan(new Tribe("Bersekers"));
 //        start the war
         new BattleField(bersekers).startWar(q.replaceAll("\\s+", ""));
-        assertEquals(6, bersekers.BATTLE_LOST);
+        assertEquals(6, bersekers.battlesLost());
     }
 }

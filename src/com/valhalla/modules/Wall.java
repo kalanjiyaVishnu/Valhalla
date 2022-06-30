@@ -18,18 +18,18 @@ public class Wall {
     }
 
 
+    public void rebuildStrong() {
+
+        this.height = prevDamage + 1;
+        prevDamage = 0;
+    }
+
     public int getPrevDamage() {
         return prevDamage;
     }
 
     public void setPrevDamage(int prevDamage) {
         this.prevDamage = prevDamage;
-    }
-
-    public void rebuildStrong() {
-
-        this.height = prevDamage + 1;
-        prevDamage = 0;
     }
 
     @Override
